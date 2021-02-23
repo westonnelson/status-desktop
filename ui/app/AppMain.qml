@@ -63,7 +63,9 @@ RowLayout {
                 appMain.changeAppSection(Constants.browser)
                 browserLayoutContainer.item.openUrlInNewTab(link)
             } else {
-                Qt.openUrlExternally(link)
+                console.log("LINK", link)
+                chatsModel.openUrl(link)
+//                Qt.openUrlExternally(link)
             }
         }
     }

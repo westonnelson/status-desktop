@@ -17,10 +17,10 @@ type ChatController* = ref object
   status*: Status
   variant*: QVariant
 
-proc newController*(status: Status): ChatController =
+proc newController*(status: Status, openUrl: proc(url: string)): ChatController =
   result = ChatController()
   result.status = status
-  result.view = newChatsView(status)
+  result.view = newChatsView(status, openUrl)
   result.variant = newQVariant(result.view)
 
 proc delete*(self: ChatController) =

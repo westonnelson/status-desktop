@@ -91,7 +91,17 @@ proc mainProc() =
   var wallet = wallet.newController(status)
   engine.setRootContextProperty("walletModel", wallet.variant)
 
-  var chat = chat.newController(status)
+  debug "SETTING URL HANDLER"
+  try:
+    engine.setUrlHandler("statusim://allo")
+  except Exception as e:
+    error "NOOOOOOON", msg = e.msg
+  debug "DONE"
+  
+  proc openUrl(url: string) =
+    engine.openUrl(url)
+
+  var chat = chat.newController(status, openUrl)
   engine.setRootContextProperty("chatsModel", chat.variant)
 
   var node = node.newController(status, netAccMgr)

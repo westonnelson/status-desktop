@@ -83,12 +83,12 @@ QtObject {
 
     function linkifyAndXSS(inputText) {
         //URLs starting with http://, https://, or ftp://
-        var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-        var replacedText = inputText.replace(replacePattern1, "<a href='$1'>$1</a>");
+        var replacePattern1 = /(\b(https?|ftp|statusim):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+        var replacedText = inputText.replace(replacePattern1, "<a href='statusim://allo'>$1</a>");
 
         //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
         var replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
-        replacedText = replacedText.replace(replacePattern2, "$1<a href='http://$2'>$2</a>");
+        replacedText = replacedText.replace(replacePattern2, "$1<a href='statusim://allo'>$2</a>");
 
         return XSS.filterXSS(replacedText)
     }

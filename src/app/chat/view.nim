@@ -46,6 +46,7 @@ QtObject:
       loadingMessages: bool
       timelineChat: Chat
       pubKey*: string
+      openUrl*: proc(url: string)
 
   proc setup(self: ChatsView) = self.QAbstractListModel.setup
 
@@ -65,7 +66,7 @@ QtObject:
     self.channelOpenTime = initTable[string, int64]()
     self.QAbstractListModel.delete
 
-  proc newChatsView*(status: Status): ChatsView =
+  proc newChatsView*(status: Status, openUrl: proc(url: string)): ChatsView =
     new(result, delete)
     result.status = status
     result.connected = false
@@ -79,12 +80,17 @@ QtObject:
     result.groups = newGroupsView(status,result.activeChannel)
     result.transactions = newTransactionsView(status)
     result.communities = newCommunitiesView(status)
+    result.openUrl = openUrl
     result.unreadMessageCnt = 0
     result.loadingMessages = false
     result.previousActiveChannelIndex = -1
     result.messageList[status_utils.getTimelineChatId()] = newChatMessageList(status_utils.getTimelineChatId(), result.status, false)
 
     result.setup()
+
+  
+  proc openUrl*(self: ChatsView, url: string) {.slot.}  =
+    self.openUrl(url)
 
   proc oldestMessageTimestampChanged*(self: ChatsView) {.signal.}
 

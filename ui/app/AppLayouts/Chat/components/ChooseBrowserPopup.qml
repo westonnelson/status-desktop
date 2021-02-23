@@ -40,8 +40,12 @@ ModalPopup {
             type: "secondary"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
-                appSettings.showBrowserSelector = !rememberChoiceCheckBox.checked
-                Qt.openUrlExternally(popup.link)
+
+                console.log("LINK", "statusim://allo")
+                chatsModel.openUrl("statusim://allo")
+                // appSettings.showBrowserSelector = !rememberChoiceCheckBox.checked
+
+                // Qt.openUrlExternally(popup.link)
             }
         }
 
