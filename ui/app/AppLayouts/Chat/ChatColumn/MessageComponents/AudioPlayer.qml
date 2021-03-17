@@ -1,5 +1,6 @@
 import QtQuick 2.3
 import QtMultimedia 5.14
+import QtGraphicalEffects 1.13
 import "../../../../../shared"
 import "../../../../../imports"
 
@@ -17,31 +18,38 @@ Item {
 
     SVGImage {
         id: playButton
-        source: audioMessage.playbackState == Audio.PlayingState ? "../../../../img/icon-pause.svg" : "../../../../img/icon-play.svg"
+        source: audioMessage.playbackState === Audio.PlayingState ? "../../../../img/icon-pause.svg" : "../../../../img/icon-play.svg"
         width: 15
         height: 15
         anchors.left: parent.left
         anchors.leftMargin: Style.current.padding
         anchors.verticalCenter: parent.verticalCenter
+
+        ColorOverlay {
+            anchors.fill: parent
+            source: parent
+            color: Style.current.textColor
+        }
+
         MouseArea {
-              id: playArea
-              anchors.fill: parent
-              cursorShape: Qt.PointingHandCursor
-              onPressed: {
-                  if(audioMessage.playbackState === Audio.PlayingState){
-                      audioMessage.pause();
-                  } else {
-                      audioMessage.play();
-                  }
-                  
-              }
-          }
+            id: playArea
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onPressed: {
+                if (audioMessage.playbackState === Audio.PlayingState) {
+                    audioMessage.pause();
+                } else {
+                    audioMessage.play();
+                }
+
+            }
+        }
     }
     
     Rectangle {
         height: 2
         width: 300
-        color: Style.current.grey
+        color: Style.current.inputBackground
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: playButton.right
         anchors.leftMargin: 20
@@ -53,7 +61,7 @@ Item {
                 if(audioMessage.playbackState === Audio.StoppedState) return 0;
                 return parent.width * audioMessage.position / audioMessage.duration;
             }
-            color: Style.current.black
+            color: Style.current.textColor
             anchors.verticalCenter: parent.verticalCenter
         }
 
@@ -61,7 +69,7 @@ Item {
             id: handle
             width: 10
             height: 10
-            color: Style.current.black
+            color: Style.current.textColor
             radius: 10
             anchors.verticalCenter: parent.verticalCenter
             x: progress.width

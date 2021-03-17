@@ -192,6 +192,7 @@ Item {
                 active: isAudio
                 anchors.top: parent.top
                 anchors.topMargin: active ? Style.current.halfPadding : 0
+                z: 51
 
                 sourceComponent: Component {
                     AudioPlayer {

@@ -36,7 +36,7 @@ Rectangle {
         target: profileModel.contacts.list
         onContactChanged: {
             if (pubkey === wrapper.chatId) {
-                wrapper.profileImage = appMain.getProfileImage(wrapper.chatId)
+                wrapper.profileImage = appMain.getProfileImage(wrapper.chatId) || ""
             }
         }
     }

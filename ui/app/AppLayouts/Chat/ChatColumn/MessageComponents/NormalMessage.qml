@@ -178,6 +178,7 @@ Item {
             active: isAudio
             sourceComponent: audioPlayer
             anchors.verticalCenter: parent.verticalCenter
+            z: 51
         }
 
         Component {
