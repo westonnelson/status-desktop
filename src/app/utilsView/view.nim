@@ -110,3 +110,8 @@ QtObject:
         close(f)
     else:
       raise newException(IOError, "cannot open: " & filename)
+
+  # This is mostly useful in Windows because console.logs don't show in the console
+  proc log*(self: UtilsView, logString: string) {.slot.} =
+    debug "QML:", log = logString
+
