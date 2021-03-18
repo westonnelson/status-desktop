@@ -41,22 +41,22 @@ Item {
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             onPressed: {
-                utilsModel.log('Current state: ' + audioMessage.playbackState)
-                utilsModel.log('bufferProgress: ' + audioMessage.bufferProgress)
-                utilsModel.log('duration : ' + audioMessage.duration )
-                utilsModel.log('error : ' + audioMessage.error )
-                utilsModel.log('errorString : ' + audioMessage.errorString )
-                utilsModel.log('hasAudio  : ' + audioMessage.hasAudio  )
-                utilsModel.log('muted : ' + audioMessage.muted )
-                utilsModel.log('position  : ' + audioMessage.position  )
-//                utilsModel.log('source   : ' + audioMessage.source.toString()  )
-                utilsModel.log('status   : ' + audioMessage.status   )
-                utilsModel.log('volume   : ' + audioMessage.volume   )
+                console.log('Current state: ' + audioMessage.playbackState)
+                console.log('bufferProgress: ' + audioMessage.bufferProgress)
+                console.log('duration : ' + audioMessage.duration )
+                console.log('error : ' + audioMessage.error )
+                console.log('errorString : ' + audioMessage.errorString )
+                console.log('hasAudio  : ' + audioMessage.hasAudio  )
+                console.log('muted : ' + audioMessage.muted )
+                console.log('position  : ' + audioMessage.position  )
+//                console.log('source   : ' + audioMessage.source.toString()  )
+                console.log('status   : ' + audioMessage.status   )
+                console.log('volume   : ' + audioMessage.volume   )
                 if (audioMessage.playbackState === Audio.PlayingState) {
-                    utilsModel.log('PAUSE')
+                    console.log('PAUSE')
                     audioMessage.pause();
                 } else {
-                    utilsModel.log('PLAY')
+                    console.log('PLAY')
                     audioMessage.play();
                 }
             }
