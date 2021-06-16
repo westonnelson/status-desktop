@@ -114,32 +114,32 @@ deps: | deps-common bottles
 
 update: | update-common
 
-# Qt5 dirs (we can't indent with tabs here)
+# QT6 dirs (we can't indent with tabs here)
 ifneq ($(detected_OS),Windows)
- QT5_PCFILEDIR := $(shell pkg-config --variable=pcfiledir Qt5Core 2>/dev/null)
- QT5_LIBDIR := $(shell pkg-config --variable=libdir Qt5Core 2>/dev/null)
- ifeq ($(QT5_PCFILEDIR),)
+ QT6_PCFILEDIR := $(shell pkg-config --variable=pcfiledir Qt6Core 2>/dev/null)
+ QT6_LIBDIR := $(shell pkg-config --variable=libdir Qt6Core 2>/dev/null)
+ ifeq ($(QT6_PCFILEDIR),)
   ifeq ($(QTDIR),)
-   $(error Cannot find your Qt5 installation. Please run "$(MAKE) QTDIR=/path/to/your/Qt5/installation/prefix ...")
+   $(error Cannot find your QT6 installation. Please run "$(MAKE) QTDIR=/path/to/your/QT6/installation/prefix ...")
   else
-   QT5_PCFILEDIR := $(QTDIR)/lib/pkgconfig
-   QT5_LIBDIR := $(QTDIR)/lib
-   # some manually installed Qt5 instances have wrong paths in their *.pc files, so we pass the right one to the linker here
+   QT6_PCFILEDIR := $(QTDIR)/lib/pkgconfig
+   QT6_LIBDIR := $(QTDIR)/lib
+   # some manually installed QT6 instances have wrong paths in their *.pc files, so we pass the right one to the linker here
    ifeq ($(detected_OS),Darwin)
     NIM_PARAMS += -L:"-framework Foundation -framework Security -framework IOKit -framework CoreServices"
     # Fix for failures due to 'can't allocate code signature data for'
     NIM_PARAMS += --passL:"-headerpad_max_install_names"
-    NIM_PARAMS += --passL:"-F$(QT5_LIBDIR)"
-    export QT5_LIBDIR
+    NIM_PARAMS += --passL:"-F$(QT6_LIBDIR)"
+    export QT6_LIBDIR
    else
-    NIM_PARAMS += --passL:"-L$(QT5_LIBDIR)"
+    NIM_PARAMS += --passL:"-L$(QT6_LIBDIR)"
    endif
   endif
  endif
  DOTHERSIDE := vendor/DOtherSide/build/lib/libDOtherSideStatic.a
  DOTHERSIDE_CMAKE_PARAMS := -DENABLE_DYNAMIC_LIBS=OFF -DENABLE_STATIC_LIBS=ON
  # order matters here, due to "-Wl,-as-needed"
- NIM_PARAMS += --passL:"$(DOTHERSIDE)" --passL:"$(shell PKG_CONFIG_PATH="$(QT5_PCFILEDIR)" pkg-config --libs Qt5Core Qt5Qml Qt5Gui Qt5Quick Qt5QuickControls2 Qt5Widgets Qt5Svg)"
+ NIM_PARAMS += --passL:"$(DOTHERSIDE)" --passL:"$(shell PKG_CONFIG_PATH="$(QT6_PCFILEDIR)" pkg-config --libs Qt6Core Qt6Qml Qt6Gui Qt6Quick Qt6QuickControls2 Qt6Widgets Qt6Svg)"
 else
  DOTHERSIDE := vendor/DOtherSide/build/lib/Release/DOtherSide.dll
  DOTHERSIDE_CMAKE_PARAMS := -T"v141" -A x64 -DENABLE_DYNAMIC_LIBS=ON -DENABLE_STATIC_LIBS=OFF
@@ -422,7 +422,7 @@ $(ICON_TOOL):
 
 run-linux:
 	echo -e "\e[92mRunning:\e[39m bin/nim_status_client"
-	LD_LIBRARY_PATH="$(QT5_LIBDIR)":"$(STATUSGO_LIBDIR)" \
+	LD_LIBRARY_PATH="$(QT6_LIBDIR)":"$(STATUSGO_LIBDIR)" \
 	./bin/nim_status_client
 
 run-macos: $(ICON_TOOL)

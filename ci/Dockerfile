@@ -1,4 +1,4 @@
-ARG QT_VERSION=5.15.2
+ARG QT_VERSION=6.2.0
 
 # QT Installation Image --------------------------------------------------------
 FROM ubuntu:18.04 AS qt-install
