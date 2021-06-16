@@ -62,7 +62,7 @@ On windows you can simply run the [`scripts/windows_build_setup.ps1`](../scripts
 
 * QT
 
-**IMPORTANT:** Due to [a bug](https://github.com/status-im/status-desktop/commit/7b07a31fa6d06c730cf563475d319f0217a211ca) in version `5.15.0`, this project is locked to version `5.14.2`. Make sure to select version `5.14.2` when installing Qt via the installer.
+**IMPORTANT:** Make sure to select version `5.15.2` when installing Qt via the installer.
 
 Linux users should install Qt through the system's package manager:
 
@@ -80,10 +80,10 @@ and add it to the PATH
 
 ```
 # Linux
-export PATH=$PATH:/path/to/Qt/5.14.2/gcc_64/bin
+export PATH=$PATH:/path/to/Qt/5.15.2/gcc_64/bin
 
 # macos
-export PATH=$PATH:/path/to/Qt/5.14.2/clang_64/bin
+export PATH=$PATH:/path/to/Qt/5.15.2/clang_64/bin
 ```
 
 * Go - (used to build status-go)
@@ -100,11 +100,11 @@ brew install go
 
 ```
 # Linux users should use their distro's package manager, but in case they do a manual install:
-export QTDIR="/path/to/Qt/5.14.2/gcc_64"
+export QTDIR="/path/to/Qt/5.15.2/gcc_64"
 export PATH="${QTDIR}/bin:${PATH}"
 
 # macOS:
-export QTDIR="/path/to/Qt/5.14.2/clang_64"
+export QTDIR="/path/to/Qt/5.15.2/clang_64"
 export PATH="${QTDIR}/bin:${PATH}"
 ```
 
