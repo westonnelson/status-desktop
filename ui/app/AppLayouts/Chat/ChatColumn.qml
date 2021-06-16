@@ -161,10 +161,10 @@ StackLayout {
 
     Connections {
         target: profileModel.contacts
-        onContactListChanged: {
+        function onContactListChanged() {
             isBlocked = profileModel.contacts.isContactBlocked(activeChatId);
         }
-        onContactBlocked: {
+        function onContactBlocked(publicKey) {
             chatsModel.removeMessagesByUserId(publicKey)
         }
     }
@@ -183,7 +183,7 @@ StackLayout {
 
     Connections {
         target: systemTray
-        onMessageClicked: function () {
+        function onMessageClicked() {
             clickOnNotification()
         }
     }
@@ -231,7 +231,7 @@ StackLayout {
 
             Connections {
                 target: chatsModel
-                onOnlineStatusChanged: {
+                function onOnlineStatusChanged(connected) {
                     if (connected == isConnected) return;
                     isConnected = connected;
                     if(isConnected){
@@ -268,7 +268,7 @@ StackLayout {
 
             Connections {
                 target: chatsModel
-                onActiveChannelChanged: {
+                function onActiveChannelChanged() {
                     stackLayoutChatMessages.currentIndex = chatsModel.getMessageListIndex(chatsModel.activeChannelIndex)
                     if(stackLayoutChatMessages.currentIndex > -1 && !stackLayoutChatMessages.children[stackLayoutChatMessages.currentIndex].active){
                         stackLayoutChatMessages.children[stackLayoutChatMessages.currentIndex].active = true;
@@ -283,19 +283,19 @@ StackLayout {
 
         Connections {
             target: chatsModel
-            onActiveChannelChanged: {
+            function onActiveChannelChanged() {
                 chatInput.suggestions.hide();
                 chatInput.textInput.forceActiveFocus(Qt.MouseFocusReason)
                 populateSuggestions();
             }
-            onMessagePushed: {
+            function onMessagePushed(messageIndex) {
                 addSuggestionFromMessageList(messageIndex);
             }
         }
 
         Connections {
             target: profileModel
-            onContactsChanged: {
+            function onContactsChanged() {
                 populateSuggestions();
             }
         }
@@ -316,7 +316,7 @@ StackLayout {
             
             Connections {
                 target: chatsModel
-                onLoadingMessagesChanged:
+                function onLoadingMessagesChanged(value){
                     if(value){
                         loadingMessagesIndicator.active = true
                     } else {
@@ -324,6 +324,7 @@ StackLayout {
                             loadingMessagesIndicator.active = false;
                         }, 5000);
                     }
+                }
             }
 
             Loader {

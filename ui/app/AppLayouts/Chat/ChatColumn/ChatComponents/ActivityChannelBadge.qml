@@ -30,7 +30,7 @@ Rectangle {
     Connections {
         enabled: realChatType === Constants.chatTypeOneToOne
         target: profileModel.contacts.list
-        onContactChanged: {
+        function onContactChanged(pubkey) {
             if (pubkey === wrapper.chatId) {
                 wrapper.profileImage = appMain.getProfileImage(wrapper.chatId)
             }

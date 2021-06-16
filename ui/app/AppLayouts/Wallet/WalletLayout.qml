@@ -44,7 +44,7 @@ ColumnLayout {
 
         Connections {
             target: appMain
-            onSettingsLoaded: {
+            function onSettingsLoaded() {
                 // Add recent
                 walletView.restoreState(appSettings.walletSplitView)
             }

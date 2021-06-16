@@ -64,7 +64,7 @@ Item {
 
     Connections {
         target: walletModel.collectiblesLists
-        onDataChanged: {
+        function onDataChanged() {
             checkCollectiblesVisibility()
         }
     }

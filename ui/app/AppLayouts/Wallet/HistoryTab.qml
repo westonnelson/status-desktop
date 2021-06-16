@@ -59,7 +59,7 @@ Item {
 
     Connections {
         target: walletModel
-        onLoadingTrxHistoryChanged: {
+        function onLoadingTrxHistoryChanged(isLoading, address) {
             if (walletModel.currentAccount.address.toLowerCase() === address.toLowerCase()) {
                 loadingImg.active = isLoading
             }

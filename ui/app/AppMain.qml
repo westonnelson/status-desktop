@@ -174,7 +174,7 @@ RowLayout {
 
     Connections {
         target: profileModel
-        onProfileSettingsFileChanged: {
+        function onProfileSettingsFileChanged() {
             profileModel.changeLocale(globalSettings.locale)
 
 
@@ -238,7 +238,7 @@ RowLayout {
         target: profileModel
         ignoreUnknownSignals: true
         enabled: removeMnemonicAfterLogin
-        onInitialized: {
+        function onInitialized() {
             profileModel.mnemonic.remove()
         }
     }

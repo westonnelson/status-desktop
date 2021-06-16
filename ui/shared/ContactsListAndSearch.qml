@@ -76,7 +76,7 @@ Item {
 
         Connections {
             target: chatsModel
-            onEnsWasResolved: {
+            function onEnsWasResolved(resolvedPubKey, resolvedAddress) {
                 if(chatKey.text == ""){
                     ensUsername.text = "";
                     pubKey = "";

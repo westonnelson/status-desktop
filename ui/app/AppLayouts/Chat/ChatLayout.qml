@@ -17,7 +17,7 @@ SplitView {
 
     Connections {
         target: chatsModel.stickers
-        onStickerPacksLoaded: {
+        function onStickerPacksLoaded() {
             stickersLoaded = true;
         }
     }

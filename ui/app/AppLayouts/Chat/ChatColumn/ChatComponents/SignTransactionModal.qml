@@ -274,7 +274,7 @@ ModalPopup {
 
         Connections {
             target: walletModel
-            onTransactionWasSent: {
+            function onTransactionWasSent(txResult) {
                 try {
                     let response = JSON.parse(txResult)
 

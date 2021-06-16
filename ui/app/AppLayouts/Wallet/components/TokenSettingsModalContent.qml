@@ -150,7 +150,7 @@ Item {
 
                 Connections {
                     target: walletModel.customTokenList
-                    onTokensLoaded: {
+                    function onTokensLoaded(cnt) {
                         customLbl.visible = cnt > 0
                     }
                 }

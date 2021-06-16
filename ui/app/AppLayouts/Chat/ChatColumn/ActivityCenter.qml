@@ -98,6 +98,7 @@ Popup {
 
             Message {
                 id: placeholderMessage
+                width: parent.width
                 anchors.right: undefined
                 messageId: "placeholderMessage"
                 userName: "@vitalik"

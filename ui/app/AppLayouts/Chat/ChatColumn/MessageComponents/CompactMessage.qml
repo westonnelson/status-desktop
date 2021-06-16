@@ -46,7 +46,9 @@ Item {
             Connections {
                 enabled: root.isMessageActive
                 target: messageContextMenu
-                onClosed: setMessageActive(messageId, false)
+                function onClosed() {
+                    setMessageActive(messageId, false)
+                }
             }
         }
     }

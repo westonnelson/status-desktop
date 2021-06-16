@@ -19,7 +19,7 @@ SplitView {
 
     Connections {
         target: appMain
-        onSettingsLoaded: {
+        function onSettingsLoaded() {
             // Add recent
             profileView.restoreState(appSettings.profileSplitView)
         }
