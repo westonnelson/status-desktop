@@ -116,6 +116,18 @@ StatusWindow {
         }
     }
 
+    Connections {
+        target: singleInstance
+
+        onSecondInstanceDetected: {
+            console.log("User attempted to run the second instance of the application")
+            // activating this instance to give user visual feedback
+            applicationWindow.show()
+            applicationWindow.raise()
+            applicationWindow.requestActivate()
+        }
+    }
+
     Component.onCompleted: {
         Style.changeTheme(globalSettings.theme)
         setX(Qt.application.screens[0].width / 2 - width / 2);
