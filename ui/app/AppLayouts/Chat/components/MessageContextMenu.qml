@@ -29,6 +29,11 @@ PopupMenu {
     property var emojiReactionsReactedByUser: []
     property var onClickEdit: function(){}
     property var reactionModel
+    property bool canPin: {
+        const nbPinnedMessages = chatsModel.messageView.pinnedMessagesList.count
+
+        return nbPinnedMessages < Constants.maxNumberOfPins
+    }
 
     subMenuIcons: [{
             source: Qt.resolvedUrl("../../../../shared/img/copy-to-clipboard-icon"),
@@ -136,13 +141,25 @@ PopupMenu {
 
     Action {
         id: pinAction
-        //% "Unpin"
-        text: pinnedMessage ? qsTrId("unpin") :
-                              //% "Pin"
-                              qsTrId("pin")
+        text: {
+            if (pinnedMessage) {
+                //% "Unpin"
+                return qsTrId("unpin")
+            }
+            if (!canPin) {
+                return qsTr("You can only pin %1 messages").arg(Constants.maxNumberOfPins)
+            }
+            //% "Pin"
+            return qsTrId("pin")
+
+        }
         onTriggered: {
             if (pinnedMessage) {
                 chatsModel.messageView.unPinMessage(messageId, chatsModel.channelView.activeChannel.id)
+                return
+            }
+
+            if (!canPin) {
                 return
             }
 
@@ -152,6 +169,7 @@ PopupMenu {
         icon.source: "../../../img/pin"
         icon.width: 16
         icon.height: 16
+        icon.color: !pinnedMessage && !canPin ? Style.current.buttonDisabledForegroundColor : "#00000000"
         enabled: {
             switch (chatsModel.channelView.activeChannel.chatType) {
             case Constants.chatTypePublic: return false
