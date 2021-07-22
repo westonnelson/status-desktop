@@ -9,13 +9,15 @@ import # status-desktop libs
 proc handleChatEvents(self: ChatController) =
   # Display already saved messages
   self.status.events.on("messagesLoaded") do(e:Args):
-    self.view.pushMessages(MsgsLoadedArgs(e).messages)
+    self.view.onMessagesLoaded(MsgsLoadedArgs(e).messages)
   # Display emoji reactions
   self.status.events.on("reactionsLoaded") do(e:Args):
     self.view.reactions.push(ReactionsLoadedArgs(e).reactions)
   # Display already pinned messages
   self.status.events.on("pinnedMessagesLoaded") do(e:Args):
     self.view.pushPinnedMessages(MsgsLoadedArgs(e).messages)
+  self.status.events.on("searchMessagesLoaded") do(e:Args):
+    self.view.onSearchMessagesLoaded(MsgsLoadedArgs(e).messages)
 
   self.status.events.on("activityCenterNotificationsLoaded") do(e:Args):
     let notifications = ActivityCenterNotificationsArgs(e).activityCenterNotifications
@@ -88,8 +90,7 @@ proc handleChatEvents(self: ChatController) =
 
     if channel.chat.chatType == status_chat.ChatType.CommunityChat:
       self.view.communities.updateCommunityChat(channel.chat)
-    self.view.asyncMessageLoad(channel.chat.id)
-
+    self.status.chat.loadInitialMessagesForChannel(channel.chat.id)
   self.status.events.on("chatsLoaded") do(e:Args):
     self.view.calculateUnreadMessages()
     self.view.setActiveChannelByIndex(0)
@@ -112,8 +113,7 @@ proc handleChatEvents(self: ChatController) =
     elif channel.chat.chatType != ChatType.Profile:
       discard self.view.channelView.chats.addChatItemToList(channel.chat)
       self.view.setActiveChannel(channel.chat.id)
-    self.status.chat.chatMessages(channel.chat.id)
-    self.status.chat.chatReactions(channel.chat.id)
+    self.status.chat.loadInitialMessagesForChannel(channel.chat.id)
 
   self.status.events.on("channelLeft") do(e: Args):
     let chatId = ChatIdArg(e).chatId
