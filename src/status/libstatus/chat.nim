@@ -303,6 +303,7 @@ proc getAllComunities*(): seq[Community] =
 proc getJoinedComunities*(): seq[Community] =
   var communities: seq[Community] = @[]
   let rpcResult = callPrivateRPC("joinedCommunities".prefix).parseJSON()
+  echo rpcResult
   if rpcResult{"result"}.kind != JNull:
     for jsonCommunity in rpcResult["result"]:
       var community = jsonCommunity.toCommunity()
@@ -355,7 +356,7 @@ proc editCommunity*(communityId: string, name: string, description: string, acce
   if rpcResult{"result"} != nil and rpcResult{"result"}.kind != JNull:
     result = rpcResult["result"]["communities"][0].toCommunity()
 
-proc createCommunityChannel*(communityId: string, name: string, description: string): Chat =
+proc createCommunityChannel*(communityId: string, name: string, description: string): CommunityChat =
   let rpcResult = callPrivateRPC("createCommunityChat".prefix, %*[
     communityId,
     {
@@ -382,9 +383,9 @@ proc createCommunityChannel*(communityId: string, name: string, description: str
     raise newException(RpcException, "Error creating community channel: " & error.message)
 
   if rpcResult{"result"} != nil and rpcResult{"result"}.kind != JNull:
-    result = rpcResult["result"]["chats"][0].toChat()
+    result = rpcResult["result"]["chats"][0].toCommunityChat()
 
-proc editCommunityChannel*(communityId: string, channelId: string, name: string, description: string): Chat =
+proc editCommunityChannel*(communityId: string, channelId: string, name: string, description: string): CommunityChat =
   let rpcResult = callPrivateRPC("editCommunityChat".prefix, %*[
     communityId,
     channelId.replace(communityId, ""),
@@ -412,7 +413,7 @@ proc editCommunityChannel*(communityId: string, channelId: string, name: string,
     raise newException(RpcException, "Error editing community channel: " & error.message)
 
   if rpcResult{"result"} != nil and rpcResult{"result"}.kind != JNull:
-    result = rpcResult["result"]["chats"][0].toChat()
+    result = rpcResult["result"]["chats"][0].toCommunityChat()
 
 proc createCommunityCategory*(communityId: string, name: string, channels: seq[string]): CommunityCategory =
   let rpcResult = callPrivateRPC("createCommunityCategory".prefix, %*[
@@ -545,8 +546,7 @@ proc parseChatPinnedMessagesResponse*(rpcResult: JsonNode): (string, seq[Message
   if(messagesObj != nil and messagesObj.kind != JNull):
     var msg: Message
     for jsonMsg in messagesObj:
-      msg = jsonMsg["message"].toMessage()
-      msg.pinnedBy = $jsonMsg{"pinnedBy"}.getStr
+      msg = jsonMsg["message"].toPinnedMessage()
       messages.add(msg)
   return (rpcResult{"cursor"}.getStr, messages)
 

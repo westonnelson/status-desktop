@@ -84,11 +84,11 @@ QtObject:
         newChat.canPost = community.chats[i].canPost
         newChat.categoryId = community.chats[i].categoryId
         newChat.mentionsCount = community.chats[i].mentionsCount
-        community.chats[i] = newChat
+        community.chats[i] = CommunityChat(newChat)
         found = true
       i = i + 1
     if (not found):
-      community.chats.add(newChat)
+      community.chats.add(CommunityChat(newChat))
     
     self.calculateUnreadMessages(community)
     self.joinedCommunityList.replaceCommunity(community)

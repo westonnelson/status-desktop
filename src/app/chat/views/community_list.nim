@@ -181,14 +181,14 @@ QtObject:
         community.lastSeen[pubKey] = timestamp
       break
     
-  proc addChannelToCommunity*(self: CommunityList, communityId: string, chat: Chat) =
+  proc addChannelToCommunity*(self: CommunityList, communityId: string, chat: CommunityChat) =
     var community = self.getCommunityById(communityId)
     community.chats.add(chat)
 
     let index = self.communities.findIndexById(communityId)
     self.communities[index] = community
   
-  proc replaceChannelInCommunity*(self: CommunityList, communityId: string, channel: Chat) =
+  proc replaceChannelInCommunity*(self: CommunityList, communityId: string, channel: CommunityChat) =
     var community = self.getCommunityById(communityId)
     if community.id != "":
       let channelIdx = community.chats.findIndexById(channel.id)

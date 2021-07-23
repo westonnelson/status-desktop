@@ -450,10 +450,10 @@ proc createCommunity*(self: ChatModel, name: string, description: string, access
 proc editCommunity*(self: ChatModel, id: string, name: string, description: string, access: int, ensOnly: bool, color: string, imageUrl: string, aX: int, aY: int, bX: int, bY: int): Community =
   result = status_chat.editCommunity(id, name, description, access, ensOnly, color, imageUrl, aX, aY, bX, bY)
 
-proc createCommunityChannel*(self: ChatModel, communityId: string, name: string, description: string): Chat =
+proc createCommunityChannel*(self: ChatModel, communityId: string, name: string, description: string): CommunityChat =
   result = status_chat.createCommunityChannel(communityId, name, description)
 
-proc editCommunityChannel*(self: ChatModel, communityId: string, channelId: string, name: string, description: string): Chat =
+proc editCommunityChannel*(self: ChatModel, communityId: string, channelId: string, name: string, description: string): CommunityChat =
   result = status_chat.editCommunityChannel(communityId, channelId, name, description)
 
 proc createCommunityCategory*(self: ChatModel, communityId: string, name: string, channels: seq[string]): CommunityCategory =

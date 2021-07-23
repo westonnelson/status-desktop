@@ -40,7 +40,7 @@ QtObject:
 
   proc setCommunityItem*(self: CommunityItemView, communityItem: Community) =
     self.communityItem = communityItem
-    self.chats.setChats(communityItem.chats)
+    self.chats.setChats(communityItem.chats.toChats())
     self.categories.setCategories(communityItem.categories)
     self.members.setMembers(communityItem.members)
     self.nbMembersChanged()
@@ -158,18 +158,18 @@ QtObject:
   proc getCategories*(self: CommunityItemView): QVariant {.slot.} =
     result = newQVariant(self.categories)
 
-  proc changeChats*(self: CommunityItemView, chats: seq[Chat]) =
+  proc changeChats*(self: CommunityItemView, chats: seq[CommunityChat]) =
     self.communityItem.chats = chats
-    self.chats.setChats(chats)
+    self.chats.setChats(chats.toChats())
     self.chatsChanged()
 
-  proc addChatItemToList*(self: CommunityItemView, chat: Chat) =
+  proc addChatItemToList*(self: CommunityItemView, chat: CommunityChat) =
     self.communityItem.chats.add(chat)
-    discard self.chats.addChatItemToList(chat)
+    discard self.chats.addChatItemToList(Chat(chat))
     self.chatsChanged()
   
-  proc updateChatItemInList*(self: CommunityItemView, chat: Chat) =
-    self.chats.updateChat(chat)
+  proc updateChatItemInList*(self: CommunityItemView, chat: CommunityChat) =
+    self.chats.updateChat(Chat(chat))
     self.chatsChanged()
 
   proc addCategoryToList*(self: CommunityItemView, category: CommunityCategory) =

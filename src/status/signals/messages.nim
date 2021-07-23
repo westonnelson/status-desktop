@@ -17,6 +17,8 @@ from ../utils import parseAddress, wei2Eth
 
 proc toMessage*(jsonMsg: JsonNode): Message
 
+proc  toPinnedMessage*(jsonMsg: JsonNode): Message
+
 proc toChat*(jsonChat: JsonNode): Chat
 
 proc toReaction*(jsonReaction: JsonNode): Reaction
@@ -196,6 +198,9 @@ proc toChat*(jsonChat: JsonNode): Chat =
     for jsonMember in jsonChat["membershipUpdateEvents"]:
       result.membershipUpdateEvents.add(jsonMember.toChatMembershipEvent)
 
+proc toCommunityChat*(jsonChat: JsonNode): CommunityChat =
+  result = CommunityChat(jsonChat.toChat())
+
 proc toCommunity*(jsonCommunity: JsonNode): Community =
   result = Community(
     id: jsonCommunity{"id"}.getStr,
@@ -211,7 +216,7 @@ proc toCommunity*(jsonCommunity: JsonNode): Community =
     canJoin: jsonCommunity{"canJoin"}.getBool,
     isMember: jsonCommunity{"isMember"}.getBool,
     muted: jsonCommunity{"muted"}.getBool,
-    chats: newSeq[Chat](),
+    chats: newSeq[CommunityChat](),
     members: newSeq[string](),
     communityColor: jsonCommunity{"color"}.getStr,
     communityImage: IdentityImage()
@@ -227,7 +232,7 @@ proc toCommunity*(jsonCommunity: JsonNode): Community =
 
   if jsonCommunity.hasKey("chats") and jsonCommunity["chats"].kind != JNull:
     for chatId, chat in jsonCommunity{"chats"}:
-      result.chats.add(Chat(
+      var communityChat = CommunityChat(
         id: result.id & chatId,
         categoryId: chat{"categoryID"}.getStr(),
         communityId: result.id,
@@ -236,7 +241,16 @@ proc toCommunity*(jsonCommunity: JsonNode): Community =
         canPost: chat{"canPost"}.getBool,
         chatType: ChatType.CommunityChat,
         private: chat{"permissions"}{"private"}.getBool
-      ))
+      )
+
+      if chat.hasKey("pinnedMessages") and chat{"pinnedMessages"}.len > 0:
+        # TODO FIXME
+        debug "got pinned messages ", len = chat{"pinnedMessages"}.len
+        for pinnedMessage in chat{"pinnedMessages"}:
+          echo "pinned message"
+          communityChat.pinnedMessages.add(pinnedMessage.toPinnedMessage())
+      echo "Done"
+      result.chats.add(communityChat)
 
   if jsonCommunity.hasKey("categories") and jsonCommunity["categories"].kind != JNull:
     for catId, cat in jsonCommunity{"categories"}:
@@ -389,6 +403,11 @@ proc toMessage*(jsonMsg: JsonNode): Message =
 
   result = message
 
+proc toPinnedMessage*(jsonMsg: JsonNode): Message =
+  var msg = jsonMsg["message"].toMessage()
+  msg.pinnedBy = $jsonMsg{"pinnedBy"}.getStr
+  return msg
+  
 proc toReaction*(jsonReaction: JsonNode): Reaction =
   result = Reaction(
       id: jsonReaction{"id"}.getStr,

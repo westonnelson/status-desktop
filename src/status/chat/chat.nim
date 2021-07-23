@@ -64,7 +64,7 @@ proc toJsonNode*(self: ChatMembershipEvent): JsonNode =
 proc toJsonNode*(self: seq[ChatMembershipEvent]): seq[JsonNode] =
   result = map(self, proc(x: ChatMembershipEvent): JsonNode = x.toJsonNode)
 
-type Chat* = ref object
+type Chat* = ref object of RootObj
   id*: string # ID is the id of the chat, for public chats it is the name e.g. status, for one-to-one is the hex encoded public key and for group chats is a random uuid appended with the hex encoded pk of the creator of the chat
   communityId*: string
   private*: bool
@@ -87,6 +87,9 @@ type Chat* = ref object
   muted*: bool
   canPost*: bool
   ensName*: string
+
+type CommunityChat* =  ref object of Chat
+  pinnedMessages*: seq[Message]
 
 type CommunityAccessLevel* = enum
   unknown = 0
@@ -112,7 +115,7 @@ type Community* = object
   name*: string
   lastChannelSeen*: string
   description*: string
-  chats*: seq[Chat]
+  chats*: seq[CommunityChat]
   categories*: seq[CommunityCategory]
   members*: seq[string]
   access*: int
@@ -175,6 +178,15 @@ proc findIndexById*(self: seq[Chat], id: string): int =
       result = idx
       break
 
+proc findIndexById*(self: seq[CommunityChat], id: string): int =
+  result = -1
+  var idx = -1
+  for item in self:
+    inc idx
+    if(item.id == id):
+      result = idx
+      break
+
 proc findIndexById*(self: seq[Community], id: string): int =
   result = -1
   var idx = -1
@@ -224,3 +236,8 @@ proc isAdmin*(self: Chat, pubKey: string): bool =
     if member.id == pubKey:
       return member.joined and member.admin
   return false
+
+proc toChats*(communityChats: seq[CommunityChat]): seq[Chat] =
+  result = @[]
+  for chat in communityChats:
+    result.add(Chat(chat))

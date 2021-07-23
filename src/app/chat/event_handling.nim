@@ -51,6 +51,13 @@ proc handleChatEvents(self: ChatController) =
           continue
         
         self.view.communities.addCommunityToList(community)
+
+        for chat in community.chats:
+          if (chat.pinnedMessages.len > 0):
+            debug "PInned messages"
+            self.view.refreshPinnedMessages(chat.pinnedMessages)
+          
+
         if (self.view.communities.activeCommunity.active and self.view.communities.activeCommunity.communityItem.id == community.id):
           if (self.view.channelView.activeChannel.chatItem != nil):
             let communityChannel = self.view.communities.activeCommunity.chats.getChannelById(self.view.channelView.activeChannel.chatItem.id)
