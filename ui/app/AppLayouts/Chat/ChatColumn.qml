@@ -591,6 +591,10 @@ Item {
         Connections {
             target: chatsModel.messageView
 
+            onSearchedMessageLoaded: {
+                positionAtMessage(messageId)
+            }
+
             onMessageNotificationPushed: function(chatId, msg, contentType, chatType, timestamp, identicon, username, hasMention, isAddedContact, channelName) {
                 if (contentType == Constants.editType)
                     return;

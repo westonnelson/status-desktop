@@ -21,7 +21,6 @@ SplitView {
 
     property var messageContextMenuInst
     property var messageList: MessagesData {}
-    property bool loadingMessages: false
     property real scrollY: chatLogView.visibleArea.yPosition * chatLogView.contentHeight
     property int newMessages: 0
     property var currentTime
@@ -190,9 +189,6 @@ SplitView {
 
             Connections {
                 target: chatsModel.messageView
-                onMessagesLoaded: {
-                    loadingMessages = false;
-                }
 
                 onSendingMessage: {
                     chatLogView.scrollToBottom(true)
@@ -237,8 +233,9 @@ SplitView {
             }
 
             property var loadMsgs : Backpressure.oneInTime(chatLogView, 500, function() {
-                if(loadingMessages) return;
-                loadingMessages = true;
+                if(chatsModel.messageView.loadingHistoryMessages)
+                    return
+
                 chatsModel.messageView.loadMoreMessages();
             });
 
