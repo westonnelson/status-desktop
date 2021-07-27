@@ -15,7 +15,7 @@ ModalPopup {
 
     //% "Send"
     title: qsTrId("command-button-send")
-    height: 504
+    height: 540
 
     property MessageDialog sendingError: MessageDialog {
         id: sendingError
